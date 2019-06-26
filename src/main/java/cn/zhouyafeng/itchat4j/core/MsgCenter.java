@@ -1,5 +1,6 @@
 package cn.zhouyafeng.itchat4j.core;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
@@ -126,6 +127,14 @@ public class MsgCenter {
 					BaseMsg msg = core.getMsgList().get(0);
 					if (msg.getType() != null) {
 						try {
+							List<JSONObject> contactList = core.getContactList();
+							for (JSONObject jsonObject : contactList) {
+								String nickName =(String)jsonObject.get("Signature");
+								if(nickName.equals("越努力、越幸运。") ){
+									LOG.info("DDDDDDDDDDDDDDDDDDDDDDDDD");
+								}
+
+							}
 							if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
 								String result = msgHandler.textMsgHandle(msg);
 								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
