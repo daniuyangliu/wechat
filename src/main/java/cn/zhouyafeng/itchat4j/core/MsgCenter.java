@@ -126,17 +126,22 @@ public class MsgCenter {
 				if (core.getMsgList().get(0).getContent().length() > 0) {
 					BaseMsg msg = core.getMsgList().get(0);
 					if (msg.getType() != null) {
+						boolean flag =false; //初始化标识为不发送
 						try {
 							List<JSONObject> contactList = core.getContactList();
 							for (JSONObject jsonObject : contactList) {
 								String nickName =(String)jsonObject.get("Signature");
 								if(nickName.equals("越努力、越幸运。") ){
-									LOG.info("DDDDDDDDDDDDDDDDDDDDDDDDD");
+									LOG.info("识别到为杜小平，准备回复..");
+									flag=true;
 								}
 
 							}
 							if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
-								String result = msgHandler.textMsgHandle(msg);
+								String result =null;
+								if (flag){
+									result = msgHandler.textMsgHandle(msg);
+								}
 								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
 
