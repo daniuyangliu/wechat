@@ -1,9 +1,15 @@
 package cn.zhouyafeng.itchat4j.core;
 
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
+import cn.zhouyafeng.itchat4j.entity.Person;
+import cn.zhouyafeng.itchat4j.entity.SysCode;
+import cn.zhouyafeng.itchat4j.reposotory.PersonRepository;
+import cn.zhouyafeng.itchat4j.reposotory.SysCodeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +22,8 @@ import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgCodeEnum;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
 import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * 消息处理中心
@@ -120,8 +128,9 @@ public class MsgCenter {
 	 * @date 2017年5月14日 上午10:52:34
 	 * @param msgHandler
 	 */
-	public static void handleMsg(IMsgHandlerFace msgHandler) {
+	public static void handleMsg(IMsgHandlerFace msgHandler, JdbcTemplate jdbcTemplate) {
 		while (true) {
+			List<Person> list = new ArrayList();
 			if (core.getMsgList().size() > 0 && core.getMsgList().get(0).getContent() != null) {
 				if (core.getMsgList().get(0).getContent().length() > 0) {
 					BaseMsg msg = core.getMsgList().get(0);
@@ -130,18 +139,53 @@ public class MsgCenter {
 						try {
 							List<JSONObject> contactList = core.getContactList();
 							for (JSONObject jsonObject : contactList) {
-								String nickName =(String)jsonObject.get("Signature");
-								if(nickName.equals("越努力、越幸运。") ){
-									LOG.info("识别到为杜小平，准备回复..");
-									flag=true;
-								}
+								Person person = new Person();
+								String userName =jsonObject.get("UserName").toString().trim();
+								String province =jsonObject.get("Province").toString().trim();
+								String remarkName =jsonObject.get("RemarkName").toString().trim();
+								person.setUserName(userName);
+								person.setProvince(province);
+								person.setRemarkName(remarkName);
+								list.add(person);
+							}
+							String sysSql="select size from sys_code where id=1";
+							List<Map<String, Object>> list1 = jdbcTemplate.queryForList(sysSql);
+							String size = list1.get(0).get("size").toString();
 
+
+							if(!size.equals(String.valueOf(list.size()))){
+								LOG.info("保存实体类开始。。。。");
+//								for (Person person : list) {
+//									String insertSql="insert into person (user_name,province,remark_name) " +
+//											"values('"+person.getUserName()+"','"+person.getProvince()+"'," +
+//											"'"+person.getRemarkName()+"')";
+									String batchInsert="insert into person(user_name,province,remark_name)" +
+											"values(?,?,?)";
+									jdbcTemplate.batchUpdate(batchInsert, new BatchPreparedStatementSetter() {
+										@Override
+										public void setValues(PreparedStatement ps, int i) throws SQLException {
+											Person person = list.get(i);
+											int k=1;
+											ps.setString(k++, person.getUserName());
+											ps.setString(k++, person.getProvince());
+											ps.setString(k++, person.getRemarkName());
+										}
+
+										@Override
+										public int getBatchSize() {
+											int size1 = list.size();
+											LOG.info("jdbc批量插入数据量:"+size1);
+											return size1;
+										}
+									});
+//								}
+								String updatesize="update sys_code set size='"+String.valueOf(list.size())+"'" +
+										"where id=1 ";
+								jdbcTemplate.execute(updatesize);
+								list.clear();
 							}
 							if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
-								String result =null;
-								if (flag){
-									result = msgHandler.textMsgHandle(msg);
-								}
+								String	result = msgHandler.textMsgHandle(msg);
 								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
 

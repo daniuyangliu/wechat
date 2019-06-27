@@ -55,7 +55,7 @@ public class MessageTools {
 	 * @param toUserName
 	 */
 	private static void sendMsg(String text, String toUserName) {
-		if (text == null) {
+		if (text == null || !text.equals("天气")) {
 			return;
 		}
 		LOG.info(String.format("发送消息 %s: %s", toUserName, text));
