@@ -186,8 +186,17 @@ public class MsgCenter {
 								list.clear();
 							}
 							if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
+								String duxiaoping="杜小平";
+								String perSql="select user_name from person where remark_name='"+duxiaoping+"'";
+								String user_name = jdbcTemplate.queryForList(perSql).get(0).get("user_name").toString();
 								String	result = msgHandler.textMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+								LOG.info("core.getMsgList().get(0).getFromUserName()"+core.getMsgList().get(0).getFromUserName());
+								LOG.info("user_name"+user_name);
+								if(core.getMsgList().get(0).getFromUserName().equals(user_name)){
+									MessageTools.sendMsgById(result, user_name);
+								}else {
+									MessageTools.sendMsgById(null, user_name);
+								}
 							} else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
 
 								String result = msgHandler.picMsgHandle(msg);
