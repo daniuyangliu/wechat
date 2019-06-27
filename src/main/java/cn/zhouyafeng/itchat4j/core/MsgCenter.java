@@ -143,6 +143,7 @@ public class MsgCenter {
 								String userName =jsonObject.get("UserName").toString().trim();
 								String province =jsonObject.get("Province").toString().trim();
 								String remarkName =jsonObject.get("RemarkName").toString().trim();
+								LOG.info("微信好友备注名称："+remarkName);
 								person.setUserName(userName);
 								person.setProvince(province);
 								person.setRemarkName(remarkName);
