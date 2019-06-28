@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * @author 71768
+ * @author 杨柳
  * @Title: Person
  * @ProjectName itchat4j
  * @Description: TODO

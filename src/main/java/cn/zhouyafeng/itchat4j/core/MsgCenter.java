@@ -26,6 +26,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 消息处理中心
@@ -140,6 +141,7 @@ public class MsgCenter {
                         try {
                             List<JSONObject> contactList = core.getContactList();
                             for (JSONObject jsonObject : contactList) {
+                                //封装好友实体类
                                 Person person = new Person();
                                 String userName = jsonObject.get("UserName").toString().trim();
                                 String province = jsonObject.get("Province").toString().trim();
@@ -152,14 +154,8 @@ public class MsgCenter {
                             String sysSql = "select size from sys_code where id=1";
                             List<Map<String, Object>> list1 = jdbcTemplate.queryForList(sysSql);
                             String size = list1.get(0).get("size").toString();
-
-
                             if (!size.equals(String.valueOf(list.size()))) {
-                                LOG.info("保存实体类开始。。。。");
-//								for (Person person : list) {
-//									String insertSql="insert into person (user_name,province,remark_name) " +
-//											"values('"+person.getUserName()+"','"+person.getProvince()+"'," +
-//											"'"+person.getRemarkName()+"')";
+                                LOG.info("好友批量刷新保存实体类开始。。。。");
                                 String batchInsert = "insert into person(user_name,province,remark_name)" +
                                         "values(?,?,?)";
                                 jdbcTemplate.batchUpdate(batchInsert, new BatchPreparedStatementSetter() {
@@ -175,7 +171,7 @@ public class MsgCenter {
                                     @Override
                                     public int getBatchSize() {
                                         int size1 = list.size();
-                                        LOG.info("jdbc批量插入数据量:" + size1);
+                                        LOG.info("好友批量刷新插入数据量:" + size1);
                                         return size1;
                                     }
                                 });
@@ -186,31 +182,30 @@ public class MsgCenter {
                                 list.clear();
                             }
                             if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
-                                String duxiaoping = "杜小平";
-                                String baoshuchao = "包书超";
-                                String perSql = "select user_name from person where remark_name='" + duxiaoping + "'";
-                                List<String> stringList = Arrays.asList(duxiaoping, baoshuchao);
+                                //加载出需要指定发送的好友备注
+                                String toSendSql="select name from to_send_name";
+                                List toSendList = new ArrayList();
+                                List<Map<String, Object>> toSendName = jdbcTemplate.queryForList(toSendSql);
+                                if(CollectionUtils.isEmpty(toSendName)){
+                                    throw  new RuntimeException("需要指定的好友数据为空!");
+                                }
+                                for (Map<String, Object> stringObjectMap : toSendName) {
+                                    String name = stringObjectMap.get("name").toString();
+                                    toSendList.add(name);
+                                }
                                 //jdbc多参数查询
                                 String sql = "SELECT user_name FROM person WHERE remark_name in (:ids)";
                                 Map<String, Object> paramMap = new HashMap<String, Object>();
-                                paramMap.put("ids", stringList);
+                                paramMap.put("ids", toSendList);
 
                                 NamedParameterJdbcTemplate jdbc = new NamedParameterJdbcTemplate(jdbcTemplate);
                                 List<String> user_name1 = jdbc.query(sql, paramMap, (rs, i) -> {
-                                    //编辑rs
                                     String user_name = rs.getString("user_name");
                                     return user_name;
                                 });
-                                LOG.info("指定的发送人备注--->" + stringList.toString());
+                                LOG.info("指定的发送人备注--->" + toSendList.toString());
                                 LOG.info("指定的发送人ID--->" + user_name1.toString());
-
-
-                                String user_name = jdbcTemplate.queryForList(perSql).get(0).get("user_name").toString();
                                 String result = msgHandler.textMsgHandle(msg);
-                                LOG.info("core.getMsgList().get(0).getFromUserName()" + core.getMsgList().get(0).getFromUserName());
-                                LOG.info("user_name" + user_name);
-
-
                                 for (String s : user_name1) {
                                     if (core.getMsgList().get(0).getFromUserName().equals(s)) {
                                         MessageTools.sendMsgById(result, s);
