@@ -160,8 +160,10 @@ public class MsgCenter {
                                         ps.setInt(k++, userinfodto.getSex());
                                         ps.setString(k++, userinfodto.getUsername());
                                         String nickName = userinfodto.getNickName();
-                                        if(nickName.contains("\uD83D\uDC02") ||nickName.contains("\uD83E\uDD17")){
-                                            nickName="牛杂";
+                                        LOG.info("nickName"+nickName);
+                                        if(nickName.contains("\uD83D\uDC02") ||nickName.contains("\uD83E\uDD17")
+                                        ||nickName.contains("\uD83E\uDD30")){
+                                            nickName="群乱码";
                                         }
                                         ps.setString(k++, nickName);
                                     }
