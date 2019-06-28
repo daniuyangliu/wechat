@@ -27,7 +27,7 @@ import org.apache.http.util.EntityUtils;
 /**
  * HTTP访问类，对Apache HttpClient进行简单封装，适配器模式
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月9日 下午7:05:04
  * @version 1.0
  *
@@ -66,7 +66,7 @@ public class MyHttpClient {
 	/**
 	 * 获取cookies
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月7日 下午8:37:17
 	 * @return
 	 */
@@ -84,7 +84,7 @@ public class MyHttpClient {
 	/**
 	 * 处理GET请求
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月9日 下午7:06:19
 	 * @param url
 	 * @param params
@@ -126,7 +126,7 @@ public class MyHttpClient {
 	/**
 	 * 处理POST请求
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月9日 下午7:06:35
 	 * @param url
 	 * @param params
@@ -155,7 +155,7 @@ public class MyHttpClient {
 	/**
 	 * 上传文件到服务器
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月7日 下午9:19:23
 	 * @param url
 	 * @param reqEntity

@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * 登陆控制器
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年5月13日 下午12:56:07
  * @version 1.0
  *

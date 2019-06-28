@@ -23,7 +23,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.URLEnum;
 /**
  * 微信小工具，如获好友列表等
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年5月4日 下午10:49:16
  * @version 1.0
  *
@@ -36,7 +36,7 @@ public class WechatTools {
 	/**
 	 * 根据用户名发送文本消息
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月4日 下午10:43:14
 	 * @param msg
 	 * @param toUserName
@@ -55,7 +55,7 @@ public class WechatTools {
 	 * 可通过UserName发送消息
 	 * </p>
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月4日 下午10:56:31
 	 * @param name
 	 * @return
@@ -72,7 +72,7 @@ public class WechatTools {
 	/**
 	 * 返回好友昵称列表
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月4日 下午11:37:20
 	 * @return
 	 */
@@ -97,7 +97,7 @@ public class WechatTools {
 	/**
 	 * 返回群列表
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月5日 下午9:55:21
 	 * @return
 	 */
@@ -139,7 +139,7 @@ public class WechatTools {
 	/**
 	 * 退出微信
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月18日 下午11:56:54
 	 */
 	public static void logout() {

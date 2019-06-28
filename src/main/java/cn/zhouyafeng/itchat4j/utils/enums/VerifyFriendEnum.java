@@ -3,7 +3,7 @@ package cn.zhouyafeng.itchat4j.utils.enums;
 /**
  * 确认添加好友Enum
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年6月29日 下午9:47:14
  * @version 1.0
  *

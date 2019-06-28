@@ -4,7 +4,7 @@ package cn.zhouyafeng.itchat4j.utils.enums;
 /**
  * 消息类型枚举类
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年5月13日 下午11:53:00
  * @version 1.0
  *

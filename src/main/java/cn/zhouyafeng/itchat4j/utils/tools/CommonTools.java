@@ -26,7 +26,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.OsNameEnum;
 /**
  * 常用工具类
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月8日 下午10:59:55
  * @version 1.0
  *
@@ -85,7 +85,7 @@ public class CommonTools {
 	/**
 	 * 正则表达式处理工具
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月9日 上午12:27:10
 	 * @return
 	 */
@@ -98,7 +98,7 @@ public class CommonTools {
 	/**
 	 * xml解析器
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月9日 下午6:24:25
 	 * @param text
 	 * @return
@@ -190,7 +190,7 @@ public class CommonTools {
 	/**
 	 * 处理emoji表情
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月23日 下午2:39:04
 	 * @param d
 	 * @param k
@@ -227,7 +227,7 @@ public class CommonTools {
 	/**
 	 * 消息格式化
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月23日 下午4:19:08
 	 * @param d
 	 * @param k

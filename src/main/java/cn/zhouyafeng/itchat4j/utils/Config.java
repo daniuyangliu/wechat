@@ -10,7 +10,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.OsNameEnum;
 /**
  * 配置信息
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月23日 下午2:26:21
  * @version 1.0
  *
@@ -36,7 +36,7 @@ public class Config {
 	/**
 	 * 获取文件目录
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月8日 下午10:27:42
 	 * @return
 	 */
@@ -54,7 +54,7 @@ public class Config {
 	/**
 	 * 获取系统平台
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月8日 下午10:27:53
 	 */
 	public static OsNameEnum getOsNameEnum() {

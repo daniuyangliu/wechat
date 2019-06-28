@@ -21,7 +21,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.URLEnum;
 /**
  * 下载工具类
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月21日 下午11:18:46
  * @version 1.0
  *
@@ -34,7 +34,7 @@ public class DownloadTools {
 	/**
 	 * 处理下载任务
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月21日 下午11:00:25
 	 * @param url
 	 * @param msgId

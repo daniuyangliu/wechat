@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 收到的微信消息
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年7月3日 下午10:28:06
  * @version 1.0
  *

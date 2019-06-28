@@ -14,7 +14,7 @@ import cn.zhouyafeng.itchat4j.utils.SleepUtils;
  * 那么可以通过最后收到正常报文的时间来作为判断是否在线的依据。若报文间隔大于60秒，则认为已掉线。
  * </p>
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年5月17日 下午10:53:15
  * @version 1.0
  *

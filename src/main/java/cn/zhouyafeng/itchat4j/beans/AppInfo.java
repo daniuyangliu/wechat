@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * AppInfo
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年7月3日 下午10:38:14
  * @version 1.0
  *

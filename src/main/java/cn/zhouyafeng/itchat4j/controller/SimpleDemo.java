@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * 简单示例程序，收到文本信息自动回复原信息，收到图片、语音、小视频后根据路径自动保存
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月25日 上午12:18:09
  * @version 1.0
  *

@@ -11,6 +11,7 @@ public class ToSendName {
 
     private Long id;
     private String name;
+    private String oner;
 
     public Long getId() {
         return id;
@@ -26,6 +27,14 @@ public class ToSendName {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOner() {
+        return oner;
+    }
+
+    public void setOner(String oner) {
+        this.oner = oner;
     }
 
     @Override

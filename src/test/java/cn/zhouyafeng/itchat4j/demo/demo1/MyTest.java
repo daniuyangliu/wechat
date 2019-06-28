@@ -5,7 +5,7 @@ import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
 
 /**
  *
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月28日 上午12:44:10
  * @version 1.0
  *

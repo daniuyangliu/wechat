@@ -23,7 +23,7 @@ import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
 /**
  * 图灵机器人示例
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年4月24日 上午12:13:26
  * @version 1.0
  *

@@ -45,7 +45,7 @@ import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
 /**
  * 登陆服务实现类
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年5月13日 上午12:09:35
  * @version 1.0
  *
@@ -449,7 +449,7 @@ public class LoginServiceImpl implements ILoginService {
 	/**
 	 * 处理登陆信息
 	 *
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月9日 下午12:16:26
 	 * @param result
 	 */
@@ -583,7 +583,7 @@ public class LoginServiceImpl implements ILoginService {
 	/**
 	 * 同步消息 sync the messages
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年5月12日 上午12:24:55
 	 * @return
 	 */
@@ -628,7 +628,7 @@ public class LoginServiceImpl implements ILoginService {
 	/**
 	 * 检查是否有新消息 check whether there's a message
 	 * 
-	 * @author https://github.com/yaphone
+	 * @author yangliu
 	 * @date 2017年4月16日 上午11:11:34
 	 * @return
 	 * 

@@ -31,9 +31,9 @@ import org.springframework.util.CollectionUtils;
 /**
  * 消息处理中心
  *
- * @author https://github.com/yaphone
+ * @author yangliu
  * @version 1.0
- * @date 创建时间：2017年5月14日 下午12:47:50
+ * @date 创建时间： 下午12:47:50
  */
 public class MsgCenter {
     private static Logger LOG = LoggerFactory.getLogger(MsgCenter.class);
@@ -45,7 +45,7 @@ public class MsgCenter {
      *
      * @param msgList
      * @return
-     * @author https://github.com/yaphone
+     * @author yangliu
      * @date 2017年4月23日 下午2:30:48
      */
     public static JSONArray produceMsg(JSONArray msgList) {
@@ -127,8 +127,8 @@ public class MsgCenter {
      * 消息处理
      *
      * @param msgHandler
-     * @author https://github.com/yaphone
-     * @date 2017年5月14日 上午10:52:34
+     * @author yangliu
+     * @date  上午10:52:34
      */
     public static void handleMsg(IMsgHandlerFace msgHandler, JdbcTemplate jdbcTemplate) {
         while (true) {
@@ -150,6 +150,7 @@ public class MsgCenter {
                                 person.setProvince(province);
                                 person.setRemarkName(remarkName);
                                 list.add(person);
+//                                LOG.info("好友昵称->"+remarkName);
                             }
                             String sysSql = "select size from sys_code where id=1";
                             List<Map<String, Object>> list1 = jdbcTemplate.queryForList(sysSql);
@@ -183,7 +184,7 @@ public class MsgCenter {
                             }
                             if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
                                 //加载出需要指定发送的好友备注
-                                String toSendSql="select name from to_send_name";
+                                String toSendSql="select name from to_send_name where oner='"+core.getNickName()+"'";
                                 List toSendList = new ArrayList();
                                 List<Map<String, Object>> toSendName = jdbcTemplate.queryForList(toSendSql);
                                 if(CollectionUtils.isEmpty(toSendName)){

@@ -23,7 +23,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.StorageLoginInfoEnum;
 /**
  * 此示例演示如何获取所有好友的头像
  * 
- * @author https://github.com/yaphone
+ * @author yangliu
  * @date 创建时间：2017年6月26日 下午11:27:46
  * @version 1.0
  *
