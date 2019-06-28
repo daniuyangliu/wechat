@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.rmi.runtime.Log;
@@ -35,7 +36,7 @@ public class StartController {
     @ResponseBody
     public String start(){
         System.out.println("准备启动微信");
-        String qrPath = "D://itchat4j//login"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
+        String qrPath = "/home/java/img"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
         IMsgHandlerFace msgHandler = new SimpleDemo(); // 实现IMsgHandlerFace接口的类
         //每次启动把表清空
         String clear="delete from person";
@@ -46,6 +47,8 @@ public class StartController {
         jdbcTemplate.execute(setOne);
         Wechat wechat = new Wechat(msgHandler, qrPath,jdbcTemplate); // 【注入】
         wechat.start(); // 启动服务，会在qrPath下生成一张二维码图片，扫描即可登陆，注意，二维码图片如果超过一定时间未扫描会过期，过期时会自动更新，所以你可能
-        return "启动成功";
+        return "服务开启成功";
     }
+
+
 }
