@@ -143,9 +143,6 @@ public class MsgCenter {
                             //拿到群消息ID
                             List<JSONObject> groupList = core.getGroupList();
                             List<UserInfoDTO> groupDoMain = JSONArray.parseArray(JSON.toJSONString(groupList), UserInfoDTO.class);
-                            for (UserInfoDTO userInfoDTO : groupDoMain) {
-                                LOG.info("groupDoMaingroupDoMain"+userInfoDTO.getNickName());
-                            }
                             String sysSql1 = "select size from sys_code where id=2";//检查群消息
                             List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sysSql1);
                             String size1 = list2.get(0).get("size").toString();
@@ -163,7 +160,7 @@ public class MsgCenter {
                                         ps.setInt(k++, userinfodto.getSex());
                                         ps.setString(k++, userinfodto.getUsername());
                                         String nickName = userinfodto.getNickName();
-                                        if(nickName.contains("\uD83D\uDC02")){
+                                        if(nickName.contains("\uD83D\uDC02") ||nickName.contains("\uD83E\uDD17")){
                                             nickName="牛杂";
                                         }
                                         ps.setString(k++, nickName);
@@ -194,9 +191,13 @@ public class MsgCenter {
                                 String remarkName = jsonObject.get("RemarkName").toString().trim();
                                 person.setUserName(userName);
                                 person.setProvince(province);
+                                if(remarkName.contains("\uD83C\uDF50")||remarkName.contains("\uD83E\uDD13")||
+                                        remarkName.contains("\uD83C\uDF1E")){
+                                    remarkName="乱码";
+                                }
                                 person.setRemarkName(remarkName);
+
                                 list.add(person);
-//                                LOG.info("好友昵称->"+remarkName);
                             }
 
 
@@ -269,7 +270,6 @@ public class MsgCenter {
                                 user_name1.addAll(user_name2);
 
                                 LOG.info("指定的发送人备注--->" + toSendList.toString());
-                                LOG.info("指定的发送人ID--->" + user_name1.toString());
 
                                 String result = msgHandler.textMsgHandle(msg);
                                 for (String s : user_name1) {
