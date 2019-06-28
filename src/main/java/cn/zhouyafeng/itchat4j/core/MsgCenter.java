@@ -8,8 +8,10 @@ import java.util.regex.Matcher;
 
 import cn.zhouyafeng.itchat4j.entity.Person;
 import cn.zhouyafeng.itchat4j.entity.SysCode;
+import cn.zhouyafeng.itchat4j.entity.UserInfoDTO;
 import cn.zhouyafeng.itchat4j.reposotory.PersonRepository;
 import cn.zhouyafeng.itchat4j.reposotory.SysCodeRepository;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,8 +139,52 @@ public class MsgCenter {
                 if (core.getMsgList().get(0).getContent().length() > 0) {
                     BaseMsg msg = core.getMsgList().get(0);
                     if (msg.getType() != null) {
-                        boolean flag = false; //初始化标识为不发送
                         try {
+                            //拿到群消息ID
+                            List<JSONObject> groupList = core.getGroupList();
+                            List<UserInfoDTO> groupDoMain = JSONArray.parseArray(JSON.toJSONString(groupList), UserInfoDTO.class);
+                            for (UserInfoDTO userInfoDTO : groupDoMain) {
+                                LOG.info("groupDoMaingroupDoMain"+userInfoDTO.getNickName());
+                            }
+                            String sysSql1 = "select size from sys_code where id=2";//检查群消息
+                            List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sysSql1);
+                            String size1 = list2.get(0).get("size").toString();
+                            if (!size1.equals(String.valueOf(groupList.size()))) {
+                                //如果群数量和真是数量buyizhi
+                                LOG.info("群消息批量刷新保存实体类开始。。。。");
+                                String batchInsert = "insert into group_list(chat_room_id,sex,user_name,nick_name)" +
+                                        "values(?,?,?,?)";
+                                jdbcTemplate.batchUpdate(batchInsert, new BatchPreparedStatementSetter() {
+                                    @Override
+                                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                                        UserInfoDTO userinfodto = groupDoMain.get(i);
+                                        int k = 1;
+                                        ps.setInt(k++, userinfodto.getChatRoomId());
+                                        ps.setInt(k++, userinfodto.getSex());
+                                        ps.setString(k++, userinfodto.getUsername());
+                                        String nickName = userinfodto.getNickName();
+                                        if(nickName.contains("\uD83D\uDC02")){
+                                            nickName="牛杂";
+                                        }
+                                        ps.setString(k++, nickName);
+                                    }
+
+                                    @Override
+                                    public int getBatchSize() {
+                                        int size1 = groupDoMain.size();
+                                        LOG.info("群批量刷新插入数据量:" + size1);
+                                        return size1;
+                                    }
+                                });
+//								}
+                                //设置群数量
+                                String updatesize = "update sys_code set size='" + String.valueOf(groupDoMain.size()) + "'" +
+                                        "where id=2 ";
+                                jdbcTemplate.execute(updatesize);
+                                groupDoMain.clear();
+
+                            }
+
                             List<JSONObject> contactList = core.getContactList();
                             for (JSONObject jsonObject : contactList) {
                                 //封装好友实体类
@@ -152,6 +198,8 @@ public class MsgCenter {
                                 list.add(person);
 //                                LOG.info("好友昵称->"+remarkName);
                             }
+
+
                             String sysSql = "select size from sys_code where id=1";
                             List<Map<String, Object>> list1 = jdbcTemplate.queryForList(sysSql);
                             String size = list1.get(0).get("size").toString();
@@ -182,6 +230,7 @@ public class MsgCenter {
                                 jdbcTemplate.execute(updatesize);
                                 list.clear();
                             }
+                            //只接收文字描述
                             if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
                                 //加载出需要指定发送的好友备注
                                 String toSendSql="select name from to_send_name where oner='"+core.getNickName()+"'";
@@ -204,8 +253,24 @@ public class MsgCenter {
                                     String user_name = rs.getString("user_name");
                                     return user_name;
                                 });
+
+
+                                //群消息多参数查询
+                                String sqlGroup = "SELECT user_name FROM group_list WHERE nick_name in (:ids)";
+                                Map<String, Object> paramMapGroup = new HashMap<String, Object>();
+                                paramMapGroup.put("ids", toSendList);
+
+                                NamedParameterJdbcTemplate jdbc1 = new NamedParameterJdbcTemplate(jdbcTemplate);
+                                List<String> user_name2 = jdbc1.query(sqlGroup, paramMapGroup, (rs, i) -> {
+                                    String user_name = rs.getString("user_name");
+                                    return user_name;
+                                });
+                                //追加好友和群的发送人集合
+                                user_name1.addAll(user_name2);
+
                                 LOG.info("指定的发送人备注--->" + toSendList.toString());
                                 LOG.info("指定的发送人ID--->" + user_name1.toString());
+
                                 String result = msgHandler.textMsgHandle(msg);
                                 for (String s : user_name1) {
                                     if (core.getMsgList().get(0).getFromUserName().equals(s)) {
@@ -214,29 +279,29 @@ public class MsgCenter {
                                         MessageTools.sendMsgById(null, s);
                                     }
                                 }
-                            } else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
-
-                                String result = msgHandler.picMsgHandle(msg);
-                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
-                            } else if (msg.getType().equals(MsgTypeEnum.VOICE.getType())) {
-                                String result = msgHandler.voiceMsgHandle(msg);
-                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
-                            } else if (msg.getType().equals(MsgTypeEnum.VIEDO.getType())) {
-                                String result = msgHandler.viedoMsgHandle(msg);
-                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
-                            } else if (msg.getType().equals(MsgTypeEnum.NAMECARD.getType())) {
-                                String result = msgHandler.nameCardMsgHandle(msg);
-                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
-                            } else if (msg.getType().equals(MsgTypeEnum.SYS.getType())) { // 系统消息
-                                msgHandler.sysMsgHandle(msg);
-                            } else if (msg.getType().equals(MsgTypeEnum.VERIFYMSG.getType())) { // 确认添加好友消息
-                                String result = msgHandler.verifyAddFriendMsgHandle(msg);
-                                MessageTools.sendMsgById(result,
-                                        core.getMsgList().get(0).getRecommendInfo().getUserName());
-                            } else if (msg.getType().equals(MsgTypeEnum.MEDIA.getType())) { // 多媒体消息
-                                String result = msgHandler.mediaMsgHandle(msg);
-                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
-                            }
+                            } //else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
+//
+//                                String result = msgHandler.picMsgHandle(msg);
+//                                MessageTools.sendMsgById(null, core.getMsgList().get(0).getFromUserName());
+//                            } else if (msg.getType().equals(MsgTypeEnum.VOICE.getType())) {
+//                                String result = msgHandler.voiceMsgHandle(msg);
+//                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//                            } else if (msg.getType().equals(MsgTypeEnum.VIEDO.getType())) {
+//                                String result = msgHandler.viedoMsgHandle(msg);
+//                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//                            } else if (msg.getType().equals(MsgTypeEnum.NAMECARD.getType())) {
+//                                String result = msgHandler.nameCardMsgHandle(msg);
+//                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//                            } else if (msg.getType().equals(MsgTypeEnum.SYS.getType())) { // 系统消息
+//                                msgHandler.sysMsgHandle(msg);
+//                            } else if (msg.getType().equals(MsgTypeEnum.VERIFYMSG.getType())) { // 确认添加好友消息
+//                                String result = msgHandler.verifyAddFriendMsgHandle(msg);
+//                                MessageTools.sendMsgById(result,
+//                                        core.getMsgList().get(0).getRecommendInfo().getUserName());
+//                            } else if (msg.getType().equals(MsgTypeEnum.MEDIA.getType())) { // 多媒体消息
+//                                String result = msgHandler.mediaMsgHandle(msg);
+//                                MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

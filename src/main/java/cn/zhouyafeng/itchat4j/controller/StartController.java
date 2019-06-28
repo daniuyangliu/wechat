@@ -49,6 +49,21 @@ public class StartController {
         wechat.start(); // 启动服务，会在qrPath下生成一张二维码图片，扫描即可登陆，注意，二维码图片如果超过一定时间未扫描会过期，过期时会自动更新，所以你可能
         return "服务开启成功";
     }
+    @RequestMapping("/tulin")
+    public String startTuli(){
+        IMsgHandlerFace msgHandler = new TulingRobot();
+        String clear="delete from person";
+        jdbcTemplate.execute(clear);
+        String clearG="delete from group_list";
+        jdbcTemplate.execute(clearG);
+        LOG.info("好友数据及群数据清空完成...");
+        String setOne="update sys_code set size='1' where id in(1,2)";
+        LOG.info("好友数量及群清空完成...");
+        jdbcTemplate.execute(setOne);
+        Wechat wechat = new Wechat(msgHandler, "D://itchat4j/login",jdbcTemplate);
+        wechat.start();
+        return "图灵启动";
+    }
 
 
 }

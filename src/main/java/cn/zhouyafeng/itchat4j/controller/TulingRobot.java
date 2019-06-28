@@ -1,16 +1,4 @@
-package cn.zhouyafeng.itchat4j.demo.demo2;
-
-import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.util.EntityUtils;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+package cn.zhouyafeng.itchat4j.controller;
 
 import cn.zhouyafeng.itchat4j.Wechat;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
@@ -19,7 +7,16 @@ import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
 import cn.zhouyafeng.itchat4j.utils.MyHttpClient;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
 import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
+
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 图灵机器人示例
@@ -50,8 +47,8 @@ public class TulingRobot implements IMsgHandlerFace {
 			JSONObject obj = JSON.parseObject(result);
 			if (obj.getString("code").equals("100000")) {
 				result = obj.getString("text");
-			} else {
-				result = "处理有误";
+			} else if(obj.getString("code").equals("40004")){
+				result = "当天次数已用完";
 			}
 		} catch (Exception e) {
 			logger.info(e.getMessage());
