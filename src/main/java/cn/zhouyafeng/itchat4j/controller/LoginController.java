@@ -10,6 +10,11 @@ import cn.zhouyafeng.itchat4j.service.impl.LoginServiceImpl;
 import cn.zhouyafeng.itchat4j.thread.CheckLoginStatusThread;
 import cn.zhouyafeng.itchat4j.utils.SleepUtils;
 import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 登陆控制器
@@ -23,6 +28,7 @@ public class LoginController {
 	private static Logger LOG = LoggerFactory.getLogger(LoginController.class);
 	private ILoginService loginService = new LoginServiceImpl();
 	private static Core core = Core.getInstance();
+	private JdbcTemplate jdbcTemplate;
 
 	public void login(String qrPath) {
 		if (core.isAlive()) { // 已登陆
@@ -65,10 +71,17 @@ public class LoginController {
 
 		LOG.info("6. 开启微信状态通知");
 		loginService.wxStatusNotify();
-
+		jdbcTemplate.execute("update login set flag=0");
 		LOG.info("7. 清除。。。。");
 		CommonTools.clearScreen();
 		LOG.info(String.format("欢迎回来， %s", core.getNickName()));
+		List<Map<String, Object>> maps = jdbcTemplate.queryForList("select user from login where user='" + core.getNickName() + "'");
+		if(!CollectionUtils.isEmpty(maps)){
+			jdbcTemplate.execute("update login set flag =1 where user='"+core.getNickName()+"'");
+		}else {
+			jdbcTemplate.execute("insert into login(user,flag) values ('"+core.getNickName()+"'" +
+					","+1+")");
+		}
 
 		LOG.info("8. 开始接收消息");
 		loginService.startReceiving();
@@ -84,5 +97,13 @@ public class LoginController {
 
 		LOG.info("12.开启微信状态检测线程");
 		new Thread(new CheckLoginStatusThread()).start();
+	}
+
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 }

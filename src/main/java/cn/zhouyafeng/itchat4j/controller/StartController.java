@@ -36,7 +36,7 @@ public class StartController {
     @ResponseBody
     public String start(){
         System.out.println("准备启动微信");
-        String qrPath = "/home/java/img"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
+        String qrPath = "D:\\itchat4j\\login"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
         IMsgHandlerFace msgHandler = new SimpleDemo(); // 实现IMsgHandlerFace接口的类
         //每次启动把表清空
         String clear="delete from person";

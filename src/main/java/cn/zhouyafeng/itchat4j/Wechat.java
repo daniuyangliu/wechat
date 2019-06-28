@@ -25,6 +25,7 @@ public class Wechat {
 
 		// 登陆
 		LoginController login = new LoginController();
+		login.setJdbcTemplate(jdbcTemplate);
 		login.login(qrPath);
 	}
 	public Wechat(IMsgHandlerFace msgHandler, String qrPath) {
