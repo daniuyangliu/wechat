@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Title: StartController
  * @ProjectName itchat4j
  * @Description: TODO
- * @date 2019/6/2616:06
+ * @date 2019/6/2616:06213
  */
 @Controller
 public class MainController {
