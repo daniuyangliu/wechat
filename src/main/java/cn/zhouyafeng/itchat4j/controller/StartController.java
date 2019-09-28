@@ -4,6 +4,7 @@ import cn.zhouyafeng.itchat4j.Wechat;
 import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
 import cn.zhouyafeng.itchat4j.reposotory.PersonRepository;
 import cn.zhouyafeng.itchat4j.reposotory.SysCodeRepository;
+import org.apache.http.annotation.Contract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,16 @@ public class StartController {
     @RequestMapping("/start")
     @ResponseBody
     public String start(){
-        System.out.println("准备启动微信");
         String qrPath = "D:\\itchat4j\\login"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
+        System.out.println("准备启动微信");
         IMsgHandlerFace msgHandler = new SimpleDemo(); // 实现IMsgHandlerFace接口的类
-        //每次启动把表清空
+        //每次启动把表清空的撒的撒
         String clear="delete from person";
+        if (clear.equals("123"))
         jdbcTemplate.execute(clear);
-        LOG.info("好友数据清空完成...");
+        LOG.info("大是...");
         String setOne="update sys_code set size='1' where id=1";
-        LOG.info("好友数量清空完成...");
+        LOG.info("你好...");
         jdbcTemplate.execute(setOne);
         Wechat wechat = new Wechat(msgHandler, qrPath,jdbcTemplate); // 【注入】
         wechat.start(); // 启动服务，会在qrPath下生成一张二维码图片，扫描即可登陆，注意，二维码图片如果超过一定时间未扫描会过期，过期时会自动更新，所以你可能
